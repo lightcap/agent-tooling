@@ -1,0 +1,190 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["targets", "servers"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {"type": "string"},
+    "backupDir": {"type": "string"},
+    "targets": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "claude": {
+          "type": "object",
+          "required": ["mcpConfigPath"],
+          "additionalProperties": false,
+          "properties": {
+            "mcpConfigPath": {"type": "string"},
+            "scope": {"enum": ["user", "local", "project"]},
+            "settingsPath": {"type": "string"},
+            "projectPath": {"type": "string"}
+          }
+        },
+        "codex": {
+          "type": "object",
+          "required": ["configPath"],
+          "additionalProperties": false,
+          "properties": {
+            "configPath": {"type": "string"}
+          }
+        },
+        "opencode": {
+          "type": "object",
+          "required": ["configPath"],
+          "additionalProperties": false,
+          "properties": {
+            "configPath": {"type": "string"}
+          }
+        }
+      }
+    },
+    "servers": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/server"}
+    },
+    "claudeAllowTools": {"type": "array", "items": {"type": "string"}}
+  },
+  "$defs": {
+    "platform": {"enum": ["claude", "codex", "opencode"]},
+    "platformList": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/platform"},
+      "uniqueItems": true
+    },
+    "stringMap": {
+      "type": "object",
+      "additionalProperties": {"type": "string"}
+    },
+    "oauth": {
+      "oneOf": [
+        {"type": "object", "additionalProperties": true},
+        {"const": false}
+      ]
+    },
+    "serverFields": {
+      "type": "object",
+      "properties": {
+        "type": {"enum": ["local", "remote"]},
+        "command": {"type": "string"},
+        "args": {"type": "array", "items": {"type": "string"}},
+        "url": {"type": "string"},
+        "transport": {"enum": ["http", "sse"]},
+        "enabled": {"type": "boolean"},
+        "environment": {"$ref": "#/$defs/stringMap"},
+        "headers": {"$ref": "#/$defs/stringMap"},
+        "headersHelper": {"type": "string"},
+        "oauth": {"$ref": "#/$defs/oauth"},
+        "timeout": {"type": "number"},
+        "alwaysLoad": {"type": "boolean"},
+        "cwd": {"type": "string"},
+        "required": {"type": "boolean"},
+        "startupTimeoutMs": {"type": "number"},
+        "startupTimeoutSec": {"type": "number"},
+        "toolTimeoutSec": {"type": "number"},
+        "enabledTools": {"type": "array", "items": {"type": "string"}},
+        "disabledTools": {"type": "array", "items": {"type": "string"}},
+        "codexApprovalTools": {"type": "array", "items": {"type": "string"}},
+        "bearerTokenEnvVar": {"type": "string"},
+        "oauthResource": {"type": "string"},
+        "scopes": {"type": "array", "items": {"type": "string"}},
+        "envHttpHeaders": {"$ref": "#/$defs/stringMap"}
+      }
+    },
+    "platformOverride": {
+      "type": "object",
+      "additionalProperties": false,
+      "properties": {
+        "type": {"enum": ["local", "remote"]},
+        "command": {"type": "string"},
+        "args": {"type": "array", "items": {"type": "string"}},
+        "url": {"type": "string"},
+        "transport": {"enum": ["http", "sse"]},
+        "enabled": {"type": "boolean"},
+        "environment": {"$ref": "#/$defs/stringMap"},
+        "headers": {"$ref": "#/$defs/stringMap"},
+        "headersHelper": {"type": "string"},
+        "oauth": {"$ref": "#/$defs/oauth"},
+        "timeout": {"type": "number"},
+        "alwaysLoad": {"type": "boolean"},
+        "cwd": {"type": "string"},
+        "required": {"type": "boolean"},
+        "startupTimeoutMs": {"type": "number"},
+        "startupTimeoutSec": {"type": "number"},
+        "toolTimeoutSec": {"type": "number"},
+        "enabledTools": {"type": "array", "items": {"type": "string"}},
+        "disabledTools": {"type": "array", "items": {"type": "string"}},
+        "codexApprovalTools": {"type": "array", "items": {"type": "string"}},
+        "bearerTokenEnvVar": {"type": "string"},
+        "oauthResource": {"type": "string"},
+        "scopes": {"type": "array", "items": {"type": "string"}},
+        "envHttpHeaders": {"$ref": "#/$defs/stringMap"}
+      },
+      "anyOf": [
+        {"not": {"required": ["type"]}},
+        {"required": ["type", "command"], "properties": {"type": {"const": "local"}}},
+        {"required": ["type", "url"], "properties": {"type": {"const": "remote"}}}
+      ]
+    },
+    "server": {
+      "allOf": [
+        {"$ref": "#/$defs/serverFields"},
+        {
+          "type": "object",
+          "required": ["type"],
+          "additionalProperties": false,
+          "properties": {
+            "type": {"enum": ["local", "remote"]},
+            "command": {"type": "string"},
+            "args": {"type": "array", "items": {"type": "string"}},
+            "url": {"type": "string"},
+            "transport": {"enum": ["http", "sse"]},
+            "enabled": {"type": "boolean"},
+            "platforms": {"$ref": "#/$defs/platformList"},
+            "excludePlatforms": {"$ref": "#/$defs/platformList"},
+            "environment": {"$ref": "#/$defs/stringMap"},
+            "headers": {"$ref": "#/$defs/stringMap"},
+            "headersHelper": {"type": "string"},
+            "oauth": {"$ref": "#/$defs/oauth"},
+            "timeout": {"type": "number"},
+            "alwaysLoad": {"type": "boolean"},
+            "cwd": {"type": "string"},
+            "required": {"type": "boolean"},
+            "startupTimeoutMs": {"type": "number"},
+            "startupTimeoutSec": {"type": "number"},
+            "toolTimeoutSec": {"type": "number"},
+            "enabledTools": {"type": "array", "items": {"type": "string"}},
+            "disabledTools": {"type": "array", "items": {"type": "string"}},
+            "codexApprovalTools": {"type": "array", "items": {"type": "string"}},
+            "bearerTokenEnvVar": {"type": "string"},
+            "oauthResource": {"type": "string"},
+            "scopes": {"type": "array", "items": {"type": "string"}},
+            "envHttpHeaders": {"$ref": "#/$defs/stringMap"},
+            "claude": {
+              "oneOf": [
+                {"$ref": "#/$defs/platformOverride"},
+                {"const": false}
+              ]
+            },
+            "codex": {
+              "oneOf": [
+                {"$ref": "#/$defs/platformOverride"},
+                {"const": false}
+              ]
+            },
+            "opencode": {
+              "oneOf": [
+                {"$ref": "#/$defs/platformOverride"},
+                {"const": false}
+              ]
+            }
+          }
+        }
+      ],
+      "oneOf": [
+        {"required": ["type", "command"], "properties": {"type": {"const": "local"}}},
+        {"required": ["type", "url"], "properties": {"type": {"const": "remote"}}}
+      ]
+    }
+  }
+}
