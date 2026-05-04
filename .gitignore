@@ -1,0 +1,5 @@
+node_modules/
+.DS_Store
+.worktrees/
+mcp-sync/servers.json
+mcp-sync/*.state.json

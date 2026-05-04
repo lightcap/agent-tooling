@@ -1,0 +1,50 @@
+{
+  "$schema": "./servers.schema.json",
+  "targets": {
+    "claude": {
+      "mcpConfigPath": "~/.claude.json",
+      "scope": "user",
+      "settingsPath": "~/.claude/settings.json"
+    },
+    "codex": {
+      "configPath": "~/.codex/config.toml"
+    },
+    "opencode": {
+      "configPath": "~/.config/opencode/opencode.json"
+    }
+  },
+  "servers": {
+    "example-local-server": {
+      "type": "local",
+      "command": "npx",
+      "args": ["-y", "@example/mcp-server"],
+      "enabled": true,
+      "platforms": ["claude", "codex", "opencode"],
+      "environment": {
+        "EXAMPLE_MODE": "readonly"
+      },
+      "codexApprovalTools": ["read_resource", "write_resource"]
+    },
+    "example-remote-server": {
+      "type": "remote",
+      "url": "https://mcp.example.com/mcp",
+      "enabled": true,
+      "excludePlatforms": ["codex"],
+      "claude": {
+        "transport": "http",
+        "oauth": {
+          "scopes": "resources:read"
+        }
+      },
+      "opencode": {
+        "oauth": {
+          "scope": "resources:read"
+        }
+      }
+    }
+  },
+  "claudeAllowTools": [
+    "read_resource",
+    "write_resource"
+  ]
+}
