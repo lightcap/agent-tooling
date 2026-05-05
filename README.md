@@ -54,6 +54,7 @@ Useful source fields:
 - `platforms` includes a server only for listed clients.
 - `excludePlatforms` omits a server from listed clients.
 - `claude`, `codex`, and `opencode` override fields for one client, or `false` disables that server for that client.
+- `claude` means Claude Code's local MCP config, not Claude.ai account connectors. Use `excludePlatforms: ["claude"]` when Claude.ai already provides the server.
 - Claude MCP targets use `mcpConfigPath` for `~/.claude.json` or `.mcp.json`; `settingsPath` is only for optional permissions allow-list updates.
 - Target paths and source paths support `~` expansion.
 - A local `*.state.json` file tracks generated JSON-target servers, Codex target paths, and Claude MCP permission entries so stale entries can be pruned on later syncs.
