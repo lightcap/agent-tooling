@@ -93,6 +93,16 @@ Use `platforms` or `excludePlatforms` to control where a server appears:
 }
 ```
 
+Here `claude` means Claude Code's local MCP config, not Claude.ai account connectors. If Claude.ai already provides a native connector, leave Claude Code out and sync only the other clients:
+
+```json
+{
+  "type": "remote",
+  "url": "https://mcp.linear.app/mcp",
+  "excludePlatforms": ["claude"]
+}
+```
+
 Use `claude`, `codex`, and `opencode` for client-specific overrides, or set one to `false` to disable that server for that client:
 
 ```json
